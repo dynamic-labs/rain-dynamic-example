@@ -1,0 +1,74 @@
+import { Globe, Wallet2, CreditCardIcon } from "lucide-react";
+
+import { Card, CardContent } from "@/components/ui/card";
+import { CreditCard } from "@/components/credit-cards";
+import DynamicLogo from "@/components/dynamic/logo";
+import { Button } from "@/components/ui/button";
+
+interface GetStartedPromoProps {
+  onGetStarted: () => void;
+}
+
+export default function GetStartedPromo({
+  onGetStarted,
+}: GetStartedPromoProps) {
+  return (
+    <Card className="max-w-sm mx-auto">
+      <CardContent className="space-y-6">
+        <CreditCard
+          type="gray-dark"
+          cardType="visa"
+          company={
+            <DynamicLogo width={140} height={30} className="text-white" />
+          }
+          cardNumber=""
+          cardCvv=""
+          cardExpiration=""
+        />
+        {/* Main Content */}
+        <div className="text-center space-y-2">
+          <h2 className="text-lg font-bold">Dynamic + Rain Demo</h2>
+          <p className="text-sm text-muted-foreground">
+            This is a testnet demo of a virtual debit card program powered by
+            Dynamic and Rain.
+          </p>
+        </div>
+        {/* Features */}
+        <div className="space-y-6">
+          <div className="flex items-start gap-4">
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0 mt-1">
+              <Globe className="h-4 w-4" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-semibold">Multi-chain Support</h3>
+              <p className="text-sm text-muted-foreground">
+                Deposit and use funds from multiple blockchains, all in one
+                place.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex items-start gap-4">
+            <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center flex-shrink-0 mt-1">
+              <Wallet2 className="h-4 w-4" />
+            </div>
+            <div className="space-y-1">
+              <h3 className="font-semibold">Account Abstraction</h3>
+              <p className="text-sm text-muted-foreground">
+                Dynamic embedded wallets powered by 7702 for seamless, gasless
+                transactions.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <div className="flex justify-center">
+          <Button className="w-full h-12 text-base" onClick={onGetStarted}>
+            <CreditCardIcon className="h-4 w-4 mr-2" />
+            Get Started
+          </Button>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
