@@ -56,7 +56,10 @@ export function useMintTokens(options?: UseMintTokensOptions) {
       if (!kernelClient) throw new Error("Kernel client not found");
       await kernelClient.waitForUserOperationReceipt({ hash });
 
-      success("USDC Minted");
+      success(
+        "USDC Minted",
+        "Please allow 1-2 minutes for the USDC to appear in your wallet"
+      );
       if (options?.onMintSuccess) options.onMintSuccess();
     } catch (e: unknown) {
       console.log("MINT TOKENS ERROR", e);

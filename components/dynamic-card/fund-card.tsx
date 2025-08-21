@@ -208,6 +208,12 @@ export default function FundCard() {
   const canSubmit =
     amount && !error && !fundCardMutation.isPending && !isLoadingContracts;
 
+  const handleOpenModal = () => {
+    if (!sdkHasLoaded || isLoadingContracts) return;
+    fetchAccountBalances(true);
+    setIsModalOpen(true);
+  };
+
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setAmount("");
@@ -222,7 +228,7 @@ export default function FundCard() {
           variant="outline"
           size="icon"
           className="rounded-full h-14 w-14 transition-all duration-200 ease-out hover:scale-110 hover:shadow-sm hover:shadow-primary/10 active:scale-105"
-          onClick={() => setIsModalOpen(true)}
+          onClick={handleOpenModal}
           disabled={!sdkHasLoaded || isLoadingContracts}
         >
           {!sdkHasLoaded || isLoadingContracts ? (
@@ -245,6 +251,8 @@ export default function FundCard() {
             <WalletBalance
               isLoading={sdkHasLoaded && isLoadingBalances}
               walletBalance={walletBalance}
+              isRefetching={isLoadingBalances}
+              handleRefresh={() => fetchAccountBalances(true)}
             />
             <StablecoinFaucet
               onMintSuccess={() => fetchAccountBalances(true)}
