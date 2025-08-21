@@ -94,8 +94,6 @@ export default function ApplicationForm({ formId }: { formId: string }) {
     );
   }
 
-  // if (!isLoggedIn) return <div>Not logged in</div>;
-
   return (
     <Form {...form}>
       <form
@@ -126,7 +124,6 @@ export default function ApplicationForm({ formId }: { formId: string }) {
 
             setSubmitResult({ ok: true, data: result });
             refreshUser();
-            form.reset();
             redirect("/card");
           } catch (error) {
             const errorMessage =

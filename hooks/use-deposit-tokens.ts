@@ -60,7 +60,10 @@ export function useDepositToken(options?: UseDepositTokenOptions) {
       if (!kernelClient) throw new Error("Kernel client not found");
       await kernelClient.waitForUserOperationReceipt({ hash });
 
-      success("Deposit Confirmed");
+      success(
+        "Deposit Processing",
+        "Please allow 1-2 minutes for your available balance to update"
+      );
       if (options?.onDepositSuccess) options.onDepositSuccess();
     } catch (error) {
       console.error("Failed to transfer token:", error);
