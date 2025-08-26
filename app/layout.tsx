@@ -10,9 +10,9 @@ import "./globals.css";
 const inter = Inter({ subsets: ["latin"] });
 
 export function generateMetadata(): Metadata {
-  const TITLE = "Rain x Dynamic";
+  const TITLE = "Dynamic Stablecoin Debit Card Demo";
   const DESCRIPTION =
-    "A testnet demo of a virtual debit card program powered by Dynamic and Rain.";
+    "Seamless stablecoin backed debit card experience with Dynamic wallets. Social login, gasless transactions, virtual Visa card - no crypto expertise required.";
   return {
     title: TITLE,
     description: DESCRIPTION,
