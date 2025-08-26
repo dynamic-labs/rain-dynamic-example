@@ -1,24 +1,24 @@
-# Dynamic + Rain Demo
+# Dynamic Stablecoin Debit Card Demo
 
-A testnet demonstration of a virtual debit card program powered by **Dynamic** embedded wallets and **Rain** card issuance infrastructure.
+A seamless stablecoin backed debit card experience powered by **Dynamic's** embedded wallets. Create wallets instantly with social logins, enjoy gasless transactions, and get a virtual Visa debit card - all without any crypto knowledge.
 
-![Dynamic + Rain Demo](/public/preview.png)
+![Dynamic Stablecoin Debit Card Demo](/public/preview.png)
 
 ## 🌟 Features
 
 ### 🔐 **Dynamic Embedded Wallets**
 
 - **Email & Social Logins**: Create wallets instantly using email, Google, Discord, and other social providers
-- **EIP-7702 Smart Wallets**: Regular wallets enhanced with smart contract capabilities when needed
-- **Account Abstraction**: Powered by ZeroDev for seamless, gasless transactions
+- **Smart Wallets**: Enhanced wallets with smart contract capabilities for improved user experience
+- **Gasless Transactions**: No need to hold native tokens or worry about gas fees
 - **Multi-chain Support**: Switch between supported networks within the same wallet
 
-### 🏦 **Rain Card Issuance**
+### 🏦 **Virtual Card Integration**
 
 - **Instant Virtual Debit Cards**: Get a virtual Visa debit card automatically upon application approval
 - **Real Card Details**: Access actual card numbers, CVV, and expiration dates for testing
 - **Secure Encryption**: Card details are encrypted and only viewable when authenticated
-- **Automated KYC**: Streamlined application process (demo applications are auto-approved)
+- **Streamlined KYC**: Simplified application process integrated with Dynamic's user management
 
 ### 💳 **Card Management**
 
@@ -79,25 +79,25 @@ A testnet demonstration of a virtual debit card program powered by **Dynamic** e
 
 ## 🛠 Technical Architecture
 
-### Authentication Flow
+### Dynamic-Powered Authentication Flow
 
-1. **Dynamic SDK Integration**: Handles wallet creation and user authentication
-2. **JWT Verification**: Secure token validation for API access
-3. **Metadata Storage**: User and card data stored in Dynamic's user metadata
+1. **Dynamic SDK Integration**: Seamlessly handles wallet creation and user authentication
+2. **JWT Verification**: Secure token validation for API access powered by Dynamic
+3. **Unified Metadata Storage**: User and card data managed in Dynamic's metadata system
 
 ### Smart Wallet Features
 
-- **ZeroDev Integration**: Account abstraction for improved user experience
+- **Account Abstraction**: Simplified user experience with smart contract capabilities
 - **Gasless Transactions**: Users don't need to hold native tokens for fees
-- **EIP-7702 Support**: Enables regular wallets to act as smart contracts
+- **Enhanced Functionality**: Regular wallets enhanced with smart contract features
 
 ### Card Issuance Process
 
-1. **KYC Application**: User submits test information through the form
-2. **Rain API Integration**: Application data is sent to Rain for processing
+1. **KYC Application**: User submits test information through the application form
+2. **Integrated Processing**: Application data is processed through the integrated card issuance system
 3. **Automatic Approval**: Demo applications are instantly approved
 4. **Card Creation**: Virtual debit card is generated with real card details
-5. **Metadata Update**: Card information is stored in user's Dynamic profile
+5. **Dynamic Metadata**: Card information is seamlessly stored in user's Dynamic profile
 
 ### Multi-chain Support
 
@@ -111,7 +111,7 @@ A testnet demonstration of a virtual debit card program powered by **Dynamic** e
 
 - Node.js 18+ and pnpm
 - Dynamic Environment ID (get one at [dynamic.xyz](https://app.dynamic.xyz))
-- Rain API credentials (contact Rain for access)
+- Card issuance API credentials
 
 ### Environment Setup
 
@@ -172,9 +172,10 @@ open http://localhost:3000
 
 ### For Developers
 
-- **Multi-chain Development**: Experience seamless cross-chain functionality
-- **Account Abstraction**: See gasless transactions in action
-- **Embedded Wallets**: Understand how to integrate wallet-as-a-service
+- **Dynamic Integration**: Learn how to build with Dynamic's embedded wallet infrastructure
+- **Multi-chain Development**: Experience seamless cross-chain functionality powered by Dynamic
+- **Account Abstraction**: See gasless transactions in action with Dynamic's smart wallet features
+- **Wallet-as-a-Service**: Understand how to integrate Dynamic's embedded wallet solutions
 
 ### For Businesses
 
@@ -186,6 +187,7 @@ open http://localhost:3000
 ## 📝 Notes
 
 - **Testnet Only**: This demo uses test networks and test tokens only
+- **Dynamic-Powered**: All wallet and user management handled by Dynamic's infrastructure
 - **Auto-approval**: KYC applications are automatically approved for demo purposes
 - **Real Card Details**: Virtual cards have actual card numbers for testing
 - **Rate Limits**: Faucet and some operations may have rate limiting
@@ -195,5 +197,6 @@ open http://localhost:3000
 
 For technical questions or integration support:
 
-- **Dynamic**: [docs.dynamic.xyz](https://docs.dynamic.xyz)
-- **Rain**: Contact your Rain integration specialist
+- **Dynamic Documentation**: [docs.dynamic.xyz](https://docs.dynamic.xyz)
+- **Dynamic Community**: [Join our Discord](https://discord.gg/dynamic-xyz)
+- **Dynamic Support**: Contact through your Dynamic dashboard
