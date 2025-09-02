@@ -27,10 +27,10 @@ export default function GetStartedPromo({
         />
         {/* Main Content */}
         <div className="text-center space-y-2">
-          <h2 className="text-lg font-bold">Dynamic + Rain Demo</h2>
+          <h2 className="text-lg font-bold">Stablecoin Cards</h2>
           <p className="text-sm text-muted-foreground">
-            This is a testnet demo of a virtual debit card program powered by
-            Dynamic and Rain.
+            Instantly generate virtual debit cards for your users and businesses
+            to spend globally wherever Visa is accepted.
           </p>
         </div>
         {/* Features */}
@@ -40,10 +40,9 @@ export default function GetStartedPromo({
               <Globe className="h-4 w-4" />
             </div>
             <div className="space-y-1">
-              <h3 className="font-semibold">Multi-chain Support</h3>
+              <h3 className="font-semibold">Multi-chain</h3>
               <p className="text-sm text-muted-foreground">
-                Deposit and use funds from multiple blockchains, all in one
-                place.
+                Works across chains - all in one place.
               </p>
             </div>
           </div>
@@ -53,10 +52,10 @@ export default function GetStartedPromo({
               <Wallet2 className="h-4 w-4" />
             </div>
             <div className="space-y-1">
-              <h3 className="font-semibold">Account Abstraction</h3>
+              <h3 className="font-semibold">Gassless</h3>
               <p className="text-sm text-muted-foreground">
-                Dynamic embedded wallets powered by 7702 for seamless, gasless
-                transactions.
+                A seamless, gasless experience reducing cost and complexity for
+                users.
               </p>
             </div>
           </div>
