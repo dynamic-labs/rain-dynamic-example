@@ -198,5 +198,5 @@ open http://localhost:3000
 For technical questions or integration support:
 
 - **Dynamic Documentation**: [docs.dynamic.xyz](https://docs.dynamic.xyz)
-- **Dynamic Community**: [Join our Discord](https://discord.gg/dynamic-xyz)
+- **Dynamic Community**: [Join our Slack](https://www.dynamic.xyz/join-slack)
 - **Dynamic Support**: Contact through your Dynamic dashboard
