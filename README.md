@@ -2,7 +2,7 @@
 
 A seamless stablecoin backed debit card experience powered by **Dynamic's** embedded wallets. Create wallets instantly with social logins, enjoy gasless transactions, and get a virtual Visa debit card - all without any crypto knowledge.
 
-![Dynamic Stablecoin Debit Card Demo](/public/preview.png)
+![Dynamic Stablecoin Debit Card Demo](/public/preview-2.png)
 
 ## 🌟 Features
 

@@ -42,7 +42,7 @@ export default function GetStartedPromo({
             <div className="space-y-1">
               <h3 className="font-semibold">Multi-chain</h3>
               <p className="text-sm text-muted-foreground">
-                Works across chains - all in one place. place.
+                Works across chains - all in one place.
               </p>
             </div>
           </div>
