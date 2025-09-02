@@ -9,6 +9,10 @@ interface FooterProps {
 
 export default function Footer({
   bottomLinks = [
+    {
+      text: "GitHub",
+      url: "https://github.com/dynamic-labs/stablecoin-cards-demo",
+    },
     { text: "Docs", url: "https://docs.dynamic.xyz" },
     { text: "Dashboard", url: "https://app.dynamic.xyz" },
     { text: "Support", url: "https://www.dynamic.xyz/join-slack" },
