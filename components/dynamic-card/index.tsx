@@ -136,7 +136,6 @@ export default function DynamicCard() {
         {/* Action Buttons Row */}
         <div className="flex justify-center gap-10 mt-6">
           <FundCard />
-          <WithdrawFunds />
           <CardDetails
             disabled={!cardData}
             onDetailsSuccess={handleCardDetailsSuccess}

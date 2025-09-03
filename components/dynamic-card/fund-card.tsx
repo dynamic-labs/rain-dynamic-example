@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { Clock, Loader2, Plus } from "lucide-react";
+import { Loader2, Plus } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,55 +16,9 @@ import { UserDepositContractResponse } from "@/lib/rain";
 import { useDepositToken } from "@/hooks/use-deposit-tokens";
 import { getContractAddress } from "@/constants";
 import WalletBalance from "./wallet-balance";
-import StablecoinFaucet from "./stablecoin-faucet";
+import DepositAccountLoading from "./deposit-account-loading";
 
 const PRESET_AMOUNTS = [5, 10, 25];
-
-function DepositAccountLoading() {
-  return (
-    <div className="flex flex-col items-center justify-center py-8 space-y-4">
-      <Loader2 className="h-8 w-8 animate-spin text-muted-foreground" />
-      <div className="text-center space-y-1">
-        <p className="text-sm font-medium text-muted-foreground">
-          Loading deposit account...
-        </p>
-        <p className="text-xs text-muted-foreground/70">
-          Setting up your deposit account
-        </p>
-      </div>
-    </div>
-  );
-}
-
-function DepositAccountPending({ onRetry }: { onRetry: () => void }) {
-  return (
-    <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 dark:border-amber-800/30 rounded-lg p-4">
-      <div className="flex items-start gap-3">
-        <div className="flex-shrink-0 mt-0.5">
-          <div className="w-6 h-6 rounded-full bg-amber-100 dark:bg-amber-900/50 flex items-center justify-center">
-            <Clock className="h-3.5 w-3.5 text-amber-600 dark:text-amber-400" />
-          </div>
-        </div>
-        <div className="flex flex-col gap-3 flex-1">
-          <div className="space-y-1">
-            <span className="text-sm font-semibold text-amber-800 dark:text-amber-200">
-              Deposit Account Pending Creation
-            </span>
-            <p className="text-xs text-amber-700/80 dark:text-amber-300/70 leading-relaxed">
-              Your deposit account is being set up. Please wait a few minutes
-              and try again.
-            </p>
-          </div>
-          <div className="flex justify-start">
-            <Button variant="outline" size="sm" onClick={onRetry}>
-              Retry
-            </Button>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export default function FundCard() {
   const { sdkHasLoaded, primaryWallet, network } = useDynamicContext();
@@ -100,20 +54,26 @@ export default function FundCard() {
     data,
     isLoading: isLoadingContracts,
     isError: isContractError,
-    refetch,
   } = useQuery<{
     contract: UserDepositContractResponse;
   }>({
     queryKey: ["contracts", primaryWallet?.address, network],
     enabled: !!sdkHasLoaded && !!primaryWallet && !!network,
-    retry: false,
+    retry: (_, error) => {
+      // Retry when deposit account is not found (being created by 3rd party)
+      return error?.message?.includes("Contract not found") || false;
+    },
+    retryDelay: 1500,
     queryFn: async () => {
       const authToken = getAuthToken();
       const response = await fetch(`/api/contracts?chain=${network}`, {
         headers: { Authorization: `Bearer ${authToken}` },
       });
 
-      if (!response.ok) throw new Error("Deposit account pending creation");
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to fetch deposit account");
+      }
       return response.json();
     },
   });
@@ -144,7 +104,9 @@ export default function FundCard() {
     },
     onError: (error) => {
       console.error("Transfer failed:", error);
-      setError("Transfer failed. Please try again.");
+      setError(
+        "Deposit failed. Please check your wallet balance and try again."
+      );
     },
   });
 
@@ -155,11 +117,15 @@ export default function FundCard() {
       return false;
     }
     if (num > (walletBalance?.balance || 0)) {
-      setError(`Maximum deposit is ${walletBalance?.balance || 0}`);
+      setError(
+        `Insufficient balance. You can deposit up to ${
+          walletBalance?.balance || 0
+        } USDC`
+      );
       return false;
     }
     if (num < 1) {
-      setError("Minimum deposit is $1");
+      setError("Minimum deposit amount is 1 USDC");
       return false;
     }
     setError("");
@@ -237,35 +203,32 @@ export default function FundCard() {
             <Plus className="h-5 w-5" />
           )}
         </Button>
-        <span className="text-xs text-foreground">Add Funds</span>
+        <span className="text-xs text-foreground">Deposit</span>
       </div>
 
       <Modal
         isOpen={isModalOpen}
         onClose={handleCloseModal}
-        title="Add Funds"
-        description="Choose an amount to deposit to your card"
+        title="Deposit"
+        description="Deposit stablecoins from your wallet to your deposit account."
       >
         <div className="flex flex-col gap-6">
-          <div className="flex flex-col gap-3">
-            <WalletBalance
-              isLoading={sdkHasLoaded && isLoadingBalances}
-              walletBalance={walletBalance}
-              isRefetching={isLoadingBalances}
-              handleRefresh={() => fetchAccountBalances(true)}
-            />
-            <StablecoinFaucet
-              onMintSuccess={() => fetchAccountBalances(true)}
-            />
-          </div>
-          {/* Amount Selection */}
           {(() => {
-            if (isLoadingContracts) return <DepositAccountLoading />;
-            if (isContractError) {
-              return <DepositAccountPending onRetry={refetch} />;
+            if (isLoadingContracts || isContractError) {
+              return <DepositAccountLoading />;
             }
             return (
               <>
+                <div className="flex flex-col gap-3">
+                  {/* Amount Selection */}
+                  <WalletBalance
+                    isLoading={sdkHasLoaded && isLoadingBalances}
+                    walletBalance={walletBalance}
+                    isRefetching={isLoadingBalances}
+                    handleRefresh={() => fetchAccountBalances(true)}
+                  />
+                  {/* <StablecoinFaucet onMintSuccess={() => fetchAccountBalances(true)} /> */}
+                </div>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">
                     {PRESET_AMOUNTS.map((presetAmount) => (
