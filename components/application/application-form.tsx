@@ -47,7 +47,6 @@ export default function ApplicationForm({ formId }: { formId: string }) {
     }
   }, [sdkHasLoaded, isLoggedIn]);
 
-  const [mounted, setMounted] = useState(false);
   const [currentStep, setCurrentStep] = useState(0);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitResult, setSubmitResult] = useState<{
@@ -60,15 +59,6 @@ export default function ApplicationForm({ formId }: { formId: string }) {
     resolver: zodResolver(FormSchema),
     defaultValues: defaultValues(user?.email),
   });
-
-  useEffect(() => {
-    if (sdkHasLoaded) refreshUser();
-  }, [sdkHasLoaded]);
-
-  // Set mounted to true after hydration
-  useEffect(() => {
-    setMounted(true);
-  }, []);
 
   const isFirst = currentStep === 0;
   const isLast = currentStep === STEPS.length - 1;
@@ -83,7 +73,7 @@ export default function ApplicationForm({ formId }: { formId: string }) {
   };
 
   // Show loading state until mounted to prevent hydration mismatches
-  if (!mounted || !isLoggedIn) {
+  if (!isLoggedIn) {
     return (
       <div className="text-center space-y-4 p-6">
         <div className="animate-pulse">

@@ -11,6 +11,7 @@ import {
 import { ThemeProvider } from "@/components/theme-provider";
 import { ToastProvider } from "@/lib/toast-context";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { redirect } from "next/navigation";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient({
@@ -37,6 +38,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
                 EthereumWalletConnectors,
                 ZeroDevSmartWalletConnectors,
               ],
+              events: {
+                onLogout: () => redirect("/"),
+              },
             }}
           >
             <QueryClientProvider client={queryClient}>

@@ -4,14 +4,9 @@ import { Card, CardContent } from "@/components/ui/card";
 import { CreditCard } from "@/components/credit-cards";
 import DynamicLogo from "@/components/dynamic/logo";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
-interface GetStartedPromoProps {
-  onGetStarted: () => void;
-}
-
-export default function GetStartedPromo({
-  onGetStarted,
-}: GetStartedPromoProps) {
+export default function GetStartedPromo() {
   return (
     <Card className="max-w-sm mx-auto">
       <CardContent className="space-y-6">
@@ -62,9 +57,11 @@ export default function GetStartedPromo({
         </div>
 
         <div className="flex justify-center">
-          <Button className="w-full h-12 text-base" onClick={onGetStarted}>
-            <CreditCardIcon className="h-4 w-4 mr-2" />
-            Get Started
+          <Button className="w-full h-12 text-base" asChild>
+            <Link href="/apply">
+              <CreditCardIcon className="h-4 w-4 mr-2" />
+              Get Started
+            </Link>
           </Button>
         </div>
       </CardContent>
