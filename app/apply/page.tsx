@@ -13,9 +13,10 @@ export default function ApplyPage() {
     <PageLayout>
       <Card>
         <CardHeader>
-          <CardTitle>Application</CardTitle>
+          <CardTitle>KYC Application - Demo</CardTitle>
           <CardDescription>
-            Get started by filling out the application below.
+            This is a the demo of the Know Your Customer (KYC) verification
+            process. Prefill with sample data or use sample data for testing.
           </CardDescription>
         </CardHeader>
         <CardContent>

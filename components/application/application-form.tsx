@@ -26,6 +26,10 @@ import { Calendar as DateInput } from "@/components/application/calendar";
 import { US_STATES, OCCUPATION_OPTIONS } from "@/constants";
 import { formatSSN } from "@/utils/format-ssn";
 import { formatPhone } from "@/utils/format-phone";
+import {
+  formatNumberWithCommas,
+  parseNumberFromFormatted,
+} from "@/utils/format-number";
 import { AddressAutocomplete } from "@/components/application/address-autocomplete";
 import { cn } from "@/lib/utils";
 import { defaultValues, FormSchema, STEPS } from "./helpers";
@@ -59,6 +63,8 @@ export default function ApplicationForm({ formId }: { formId: string }) {
     resolver: zodResolver(FormSchema),
     defaultValues: defaultValues(user?.email),
   });
+
+  const fillWithTestData = () => form.reset(defaultValues(user?.email, true));
 
   const isFirst = currentStep === 0;
   const isLast = currentStep === STEPS.length - 1;
@@ -206,7 +212,7 @@ export default function ApplicationForm({ formId }: { formId: string }) {
                 name="nationalId"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>National ID</FormLabel>
+                    <FormLabel>Social Security Number</FormLabel>
                     <FormControl>
                       <Input
                         placeholder="123-45-6789"
@@ -433,12 +439,14 @@ export default function ApplicationForm({ formId }: { formId: string }) {
                     <FormLabel>Annual salary (USD)</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="120000"
+                        placeholder="120,000"
                         inputMode="numeric"
                         name="annualSalary"
-                        value={field.value}
+                        value={formatNumberWithCommas(field.value)}
                         onChange={(e) => {
-                          const digits = e.target.value.replace(/\D/g, "");
+                          const digits = parseNumberFromFormatted(
+                            e.target.value
+                          );
                           field.onChange(digits);
                         }}
                         onBlur={field.onBlur}
@@ -480,12 +488,14 @@ export default function ApplicationForm({ formId }: { formId: string }) {
                     <FormLabel>Expected monthly volume (USD)</FormLabel>
                     <FormControl>
                       <Input
-                        placeholder="5000"
+                        placeholder="5,000"
                         inputMode="numeric"
                         name="expectedMonthlyVolume"
-                        value={field.value}
+                        value={formatNumberWithCommas(field.value)}
                         onChange={(e) => {
-                          const digits = e.target.value.replace(/\D/g, "");
+                          const digits = parseNumberFromFormatted(
+                            e.target.value
+                          );
                           field.onChange(digits);
                         }}
                         onBlur={field.onBlur}
@@ -528,20 +538,31 @@ export default function ApplicationForm({ formId }: { formId: string }) {
           >
             Back
           </Button>
+
           <Button
-            type="button"
-            onClick={handleNext}
-            className={cn(isLast && "hidden")}
+            variant="link"
+            onClick={fillWithTestData}
+            className="text-xs text-muted-foreground"
           >
-            Next
+            Prefill Sample Data
           </Button>
-          <Button
-            type="submit"
-            className={cn(!isLast && "hidden")}
-            disabled={isSubmitting}
-          >
-            {isSubmitting ? "Submitting..." : "Submit"}
-          </Button>
+
+          <div className="flex items-center gap-3">
+            <Button
+              type="button"
+              onClick={handleNext}
+              className={cn(isLast && "hidden")}
+            >
+              Next
+            </Button>
+            <Button
+              type="submit"
+              className={cn(!isLast && "hidden")}
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? "Submitting..." : "Submit"}
+            </Button>
+          </div>
         </div>
 
         {submitResult?.error && (
