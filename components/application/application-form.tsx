@@ -542,7 +542,7 @@ export default function ApplicationForm({ formId }: { formId: string }) {
           <Button
             variant="link"
             onClick={fillWithTestData}
-            className="text-xs text-muted-foreground"
+            className="text-xs text-muted-foreground underline hover:text-primary"
           >
             Prefill Sample Data
           </Button>
