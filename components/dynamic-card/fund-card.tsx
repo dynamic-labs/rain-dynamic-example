@@ -7,23 +7,23 @@ import { Loader2, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import {
-  getAuthToken,
-  useDynamicContext,
-  useTokenBalances,
-} from "@/lib/dynamic";
+import { getAuthToken, useDynamicContext } from "@/lib/dynamic";
 import { UserDepositContractResponse } from "@/lib/rain";
 import { useDepositToken } from "@/hooks/use-deposit-tokens";
 import { getContractAddress } from "@/constants";
-import WalletBalance from "./wallet-balance";
 import DepositAccountLoading from "./deposit-account-loading";
+import WalletBalanceDisplay from "./wallet-balance-display";
+import { useTokenBalanceContext } from "./token-balance-context";
 
 const PRESET_AMOUNTS = [5, 10, 25];
 
 export default function FundCard() {
-  const { sdkHasLoaded, primaryWallet, network } = useDynamicContext();
-  const { depositToken } = useDepositToken();
   const queryClient = useQueryClient();
+  const { depositToken } = useDepositToken();
+  const { sdkHasLoaded, primaryWallet, network } = useDynamicContext();
+  const { getBalanceByAddress, refetch: fetchAccountBalances } =
+    useTokenBalanceContext();
+
   const [amount, setAmount] = useState("");
   const [error, setError] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,22 +33,7 @@ export default function FundCard() {
     if (!network) return undefined;
     return getContractAddress(network, "RUSDC");
   }, [network]);
-
-  const {
-    tokenBalances,
-    isLoading: isLoadingBalances,
-    fetchAccountBalances,
-  } = useTokenBalances({
-    networkId: Number(network),
-    accountAddress: primaryWallet?.address,
-    tokenAddresses: rusdcAddress ? [rusdcAddress] : [],
-  });
-
-  const walletBalance = useMemo(() => {
-    return tokenBalances?.find(
-      (t) => t.address.toLowerCase() === rusdcAddress?.toLowerCase()
-    );
-  }, [tokenBalances]);
+  const walletBalance = getBalanceByAddress(rusdcAddress || "");
 
   const {
     data,
@@ -220,14 +205,10 @@ export default function FundCard() {
             return (
               <>
                 <div className="flex flex-col gap-3">
-                  {/* Amount Selection */}
-                  <WalletBalance
-                    isLoading={sdkHasLoaded && isLoadingBalances}
-                    walletBalance={walletBalance}
-                    isRefetching={isLoadingBalances}
-                    handleRefresh={() => fetchAccountBalances(true)}
+                  <WalletBalanceDisplay
+                    tokenAddress={rusdcAddress || ""}
+                    showUSDC={true}
                   />
-                  {/* <StablecoinFaucet onMintSuccess={() => fetchAccountBalances(true)} /> */}
                 </div>
                 <div className="space-y-4">
                   <div className="grid grid-cols-2 gap-3">

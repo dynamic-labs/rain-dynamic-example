@@ -24,11 +24,11 @@ export function useMintTokens(options?: UseMintTokensOptions) {
   const [isLoading, setIsLoading] = useState(false);
   const [txHash, setTxHash] = useState<string | null>(null);
 
-  if (!primaryWallet || !isEthereumWallet(primaryWallet)) {
-    throw new Error("Wallet not connected or not EVM compatible");
-  }
-
   const mintTokens = async (mintOptions: MintOptions) => {
+    if (!primaryWallet || !isEthereumWallet(primaryWallet)) {
+      throw new Error("Wallet not connected or not EVM compatible");
+    }
+
     if (!network) throw new Error("Network not found");
     const rusdcAddress = getContractAddress(network, "RUSDC");
     const { amountDollars } = mintOptions;
@@ -57,8 +57,8 @@ export function useMintTokens(options?: UseMintTokensOptions) {
       await kernelClient.waitForUserOperationReceipt({ hash });
 
       success(
-        "USDC Minted",
-        "Please allow 1-2 minutes for the USDC to appear in your wallet"
+        "Stablecoin Claimed",
+        "Your balance will update in a few seconds"
       );
       if (options?.onMintSuccess) options.onMintSuccess();
     } catch (e: unknown) {

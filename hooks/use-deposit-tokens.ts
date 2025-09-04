@@ -62,7 +62,7 @@ export function useDepositToken(options?: UseDepositTokenOptions) {
 
       success(
         "Deposit Processing",
-        "Please allow 1-2 minutes for your available balance to update"
+        "Your balances will update in a few seconds"
       );
       if (options?.onDepositSuccess) options.onDepositSuccess();
     } catch (error) {
