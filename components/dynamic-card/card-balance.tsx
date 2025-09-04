@@ -21,6 +21,7 @@ export default function CardBalance() {
       fetch("/api/balance", {
         headers: { Authorization: `Bearer ${authToken}` },
       }).then((res) => res.json()),
+    refetchInterval: 3000, // Refetch every 3 seconds
   });
 
   const handleRefresh = async () => {
@@ -32,18 +33,21 @@ export default function CardBalance() {
   };
 
   return (
-    <div className="flex flex-col">
-      <span className="text-sm text-muted-foreground">Available Balance</span>
-      <div className="text-xl font-semibold text-foreground">
+    <div className="w-full border border-border rounded-lg p-2">
+      <div className="flex items-center justify-between">
+        <span className="text-sm text-muted-foreground">Card Balance</span>
         {isLoading || isLoading === undefined ? (
-          <Skeleton className="h-6 w-24" />
+          <Skeleton className="h-4 w-20" />
         ) : (
           <div className="flex items-center gap-2">
-            {formatBalance(data?.balance?.spendingPower || 0)}
+            <span className="text-sm font-medium text-foreground">
+              {formatBalance(data?.balance?.spendingPower || 0)}
+            </span>
             <button
-              className="cursor-pointer"
+              className="cursor-pointer p-1 rounded-md hover:bg-muted/50 transition-colors"
               onClick={handleRefresh}
               disabled={isRefetching}
+              title="Refresh balance"
             >
               <RefreshCw
                 className={cn(

@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useRef, useEffect } from "react";
 import { Copy, Check, LogOut, Coins, Wallet2, CreditCard } from "lucide-react";
-import { useDynamicContext, useTokenBalances } from "@/lib/dynamic";
+import { useDynamicContext } from "@/lib/dynamic";
 import { useQuery } from "@tanstack/react-query";
 import { getAuthToken } from "@dynamic-labs/sdk-react-core";
 import { Modal } from "@/components/ui/modal";
@@ -13,6 +13,7 @@ import { formatAddress } from "@/utils/format-address";
 import { getContractAddress } from "@/constants";
 import { UserCreditBalanceResponse } from "@/lib/rain";
 import NetworkSelector from "./network-selector";
+import { useTokenBalanceContext } from "../dynamic-card/token-balance-context";
 
 interface AccountModalProps {
   isOpen: boolean;
@@ -23,7 +24,8 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
   const { primaryWallet, network, handleLogOut, user } = useDynamicContext();
   const enabledNetworks = primaryWallet?.connector.getEnabledNetworks();
   const authToken = getAuthToken();
-
+  const { getBalanceByAddress, isLoading: isLoadingBalances } =
+    useTokenBalanceContext();
   const [copied, setCopied] = useState<string | null>(null);
   const [addressContainerWidth, setAddressContainerWidth] = useState<number>(0);
   const addressContainerRef = useRef<HTMLDivElement>(null);
@@ -32,6 +34,18 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
     if (!network) return undefined;
     return getContractAddress(network, "RUSDC");
   }, [network]);
+  const walletBalance = getBalanceByAddress(rusdcAddress || "");
+
+  // Fetch card balance
+  const { data: cardBalanceData, isLoading: isLoadingCardBalance } = useQuery<{
+    balance: UserCreditBalanceResponse;
+  }>({
+    queryKey: ["balance"],
+    queryFn: () =>
+      fetch("/api/balance", {
+        headers: { Authorization: `Bearer ${authToken}` },
+      }).then((res) => res.json()),
+  });
 
   // Measure address container width
   useEffect(() => {
@@ -46,30 +60,6 @@ export default function AccountModal({ isOpen, onClose }: AccountModalProps) {
       return () => clearTimeout(timer);
     }
   }, [isOpen]);
-
-  const { tokenBalances, isLoading: isLoadingBalances } = useTokenBalances({
-    networkId: Number(network),
-    accountAddress: primaryWallet?.address,
-    tokenAddresses: rusdcAddress ? [rusdcAddress] : [],
-  });
-
-  // Fetch card balance
-  const { data: cardBalanceData, isLoading: isLoadingCardBalance } = useQuery<{
-    balance: UserCreditBalanceResponse;
-  }>({
-    queryKey: ["balance"],
-    queryFn: () =>
-      fetch("/api/balance", {
-        headers: { Authorization: `Bearer ${authToken}` },
-      }).then((res) => res.json()),
-  });
-
-  const walletBalance = useMemo(() => {
-    if (!rusdcAddress) return undefined;
-    return tokenBalances?.find(
-      (t) => t.address.toLowerCase() === rusdcAddress?.toLowerCase()
-    );
-  }, [rusdcAddress, tokenBalances]);
 
   const copyToClipboard = async (text: string, field: string) => {
     try {

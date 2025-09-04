@@ -12,22 +12,18 @@ import { Button } from "@/components/ui/button";
 import { useIsLoggedIn, useDynamicContext } from "@/lib/dynamic";
 import { CreateCardForUserResponse } from "@/lib/rain/types";
 import { Skeleton } from "../ui/skeleton";
-import { useSwitchChain } from "@/hooks/use-switch-chain";
 
 import CardDetails from "./card-details";
 import CardBalance from "./card-balance";
 import FundCard from "./fund-card";
-import WithdrawFunds from "./withdraw-funds";
 import CardTransactions from "./card-transactions";
 import AccountModal from "../account/account-modal";
+import StablecoinFaucet from "./stablecoin-faucet";
+import { TokenBalanceProvider } from "./token-balance-context";
 
 export default function DynamicCard() {
   const isLoggedIn = useIsLoggedIn();
   const { sdkHasLoaded, user } = useDynamicContext();
-
-  // Note: Auto-switch to Base Sepolia when the wallet is ready
-  // This is to avoid a delay with Rain contract deployment on Base Sepolia
-  useSwitchChain({ targetChainId: "11155111" });
 
   const [hasMounted, setHasMounted] = useState(false);
   const [decryptedCardData, setDecryptedCardData] = useState<{
@@ -99,58 +95,62 @@ export default function DynamicCard() {
   };
 
   return (
-    <Card className="gap-4">
-      <CardHeader>
-        <div className="flex items-start gap-4">
-          <Button
-            variant="secondary"
-            size="icon"
-            className="rounded-full h-12 w-12"
-            onClick={() => setShowWalletModal(true)}
-          >
-            <Wallet2 className="h-8 w-8 text-muted-foreground" />
-          </Button>
-          <CardBalance />
-        </div>
-      </CardHeader>
-      <CardContent className="flex flex-col justify-center items-center">
-        <CreditCard
-          type="gray-dark"
-          cardType="visa"
-          company={
-            <DynamicLogo width={120} height={25} className="text-white" />
-          }
-          cardNumber={formatCardNumber()}
-          cardCvv={getCardCvv()}
-          cardExpiration={formatExpiration()}
-          showCopyIcons={showDecryptedData && !!decryptedCardData}
-          onCopyCardNumber={() =>
-            decryptedCardData &&
-            copyToClipboard(decryptedCardData.cardNumber, "cardNumber")
-          }
-          onCopyCvv={() =>
-            decryptedCardData && copyToClipboard(decryptedCardData.cvv, "cvv")
-          }
-          copiedField={copiedField}
-        />
-        {/* Action Buttons Row */}
-        <div className="flex justify-center gap-10 mt-6">
-          <FundCard />
-          <WithdrawFunds />
-          <CardDetails
-            disabled={!cardData}
-            onDetailsSuccess={handleCardDetailsSuccess}
-            showDecryptedData={showDecryptedData}
-            onToggleVisibility={toggleCardDataVisibility}
+    <TokenBalanceProvider>
+      <Card className="gap-4">
+        <CardHeader>
+          <div className="flex items-start gap-4">
+            <Button
+              variant="secondary"
+              size="icon"
+              className="rounded-full h-12 w-12"
+              onClick={() => setShowWalletModal(true)}
+            >
+              <Wallet2 className="h-8 w-8 text-muted-foreground" />
+            </Button>
+            <StablecoinFaucet />
+          </div>
+        </CardHeader>
+        <CardContent className="flex flex-col justify-center items-center gap-4">
+          <CreditCard
+            type="gray-dark"
+            cardType="visa"
+            company={
+              <DynamicLogo width={120} height={25} className="text-white" />
+            }
+            cardNumber={formatCardNumber()}
+            cardCvv={getCardCvv()}
+            cardExpiration={formatExpiration()}
+            showCopyIcons={showDecryptedData && !!decryptedCardData}
+            onCopyCardNumber={() =>
+              decryptedCardData &&
+              copyToClipboard(decryptedCardData.cardNumber, "cardNumber")
+            }
+            onCopyCvv={() =>
+              decryptedCardData && copyToClipboard(decryptedCardData.cvv, "cvv")
+            }
+            copiedField={copiedField}
           />
-        </div>
-        <CardTransactions />
-      </CardContent>
 
-      <AccountModal
-        isOpen={showWalletModal}
-        onClose={() => setShowWalletModal(false)}
-      />
-    </Card>
+          <CardBalance />
+
+          {/* Action Buttons Row */}
+          <div className="flex justify-center gap-10">
+            <FundCard />
+            <CardDetails
+              disabled={!cardData}
+              onDetailsSuccess={handleCardDetailsSuccess}
+              showDecryptedData={showDecryptedData}
+              onToggleVisibility={toggleCardDataVisibility}
+            />
+          </div>
+          <CardTransactions />
+        </CardContent>
+
+        <AccountModal
+          isOpen={showWalletModal}
+          onClose={() => setShowWalletModal(false)}
+        />
+      </Card>
+    </TokenBalanceProvider>
   );
 }

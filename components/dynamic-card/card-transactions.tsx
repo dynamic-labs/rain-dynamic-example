@@ -27,7 +27,7 @@ export default function CardTransactions() {
   });
 
   return (
-    <div className="w-full mt-8">
+    <div className="w-full mt-4">
       <h2 className="text-md font-medium text-muted-foreground mb-4">
         Transaction History
       </h2>
@@ -41,9 +41,9 @@ export default function CardTransactions() {
           // No transactions state
           if (!data?.transactions || data.transactions.length === 0) {
             return (
-              <div className="text-center py-8 text-muted-foreground">
-                <p>No transactions yet</p>
-                <p className="text-sm mt-1">
+              <div className="text-center text-muted-foreground">
+                <p className="font-medium text-sm">No transactions</p>
+                <p className="text-xs mt-1">
                   Your transaction history will appear here
                 </p>
               </div>

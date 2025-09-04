@@ -3,7 +3,27 @@ import { z } from "zod";
 export const FormSchema = z.object({
   firstName: z.string().min(1),
   lastName: z.string().min(1),
-  birthDate: z.string().min(1),
+  birthDate: z
+    .string()
+    .min(1)
+    .refine(
+      (dateString) => {
+        const birthDate = new Date(dateString);
+        const today = new Date();
+        const age = today.getFullYear() - birthDate.getFullYear();
+        const monthDiff = today.getMonth() - birthDate.getMonth();
+
+        // Adjust age if birthday hasn't occurred this year
+        const adjustedAge =
+          monthDiff < 0 ||
+          (monthDiff === 0 && today.getDate() < birthDate.getDate())
+            ? age - 1
+            : age;
+
+        return adjustedAge >= 21;
+      },
+      { message: "You must be at least 21 years old to apply." }
+    ),
   nationalId: z.string().min(1),
   email: z.string(),
   phoneNumber: z.string().min(4),
@@ -24,27 +44,61 @@ export const FormSchema = z.object({
     .refine((v) => v, { message: "You must accept the Terms of Service." }),
 });
 
-export const defaultValues = (email: string | undefined) => ({
-  firstName: "",
-  lastName: "",
-  birthDate: "",
-  nationalId: "",
-  email: email || "",
-  phoneNumber: "",
+// Test data for demo purposes
+export const TEST_DATA = {
+  firstName: "John",
+  lastName: "Doe",
+  birthDate: "2000-04-20",
+  nationalId: "123456789", // Test SSN (will be formatted as 123-45-6789)
+  phoneNumber: "5551234567", // Will be formatted as (555) 123-4567
   address: {
-    line1: "",
+    line1: "123 Main Street",
     line2: "",
-    city: "",
+    city: "San Francisco",
     region: "CA",
-    postalCode: "",
+    postalCode: "94105",
     countryCode: "US",
   },
-  occupation: "",
-  annualSalary: "",
+  occupation: "11-3031", // Financial Managers
+  annualSalary: "120000",
   accountPurpose: "spending" as const,
-  expectedMonthlyVolume: "",
+  expectedMonthlyVolume: "2500",
   isTermsOfServiceAccepted: false,
-});
+};
+
+export const defaultValues = (
+  email: string | undefined,
+  useTestData = false
+) => {
+  if (useTestData) {
+    return {
+      ...TEST_DATA,
+      email: email || "john.doe@example.com",
+    };
+  }
+
+  return {
+    firstName: "",
+    lastName: "",
+    birthDate: "",
+    nationalId: "",
+    email: email || "",
+    phoneNumber: "",
+    address: {
+      line1: "",
+      line2: "",
+      city: "",
+      region: "CA",
+      postalCode: "",
+      countryCode: "US",
+    },
+    occupation: "",
+    annualSalary: "",
+    accountPurpose: "spending" as const,
+    expectedMonthlyVolume: "",
+    isTermsOfServiceAccepted: false,
+  };
+};
 
 export const STEPS = [
   {

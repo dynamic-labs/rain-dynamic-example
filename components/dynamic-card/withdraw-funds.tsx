@@ -276,7 +276,7 @@ export default function WithdrawFunds() {
               {isWithdrawPending ? (
                 <>
                   <Loader2 className="h-4 w-4 animate-spin mr-2" />
-                  Processing...
+                  Withdrawing...
                 </>
               ) : (
                 <>Withdraw ${amount || "0"}</>
