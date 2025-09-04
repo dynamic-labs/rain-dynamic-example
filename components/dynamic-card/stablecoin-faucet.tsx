@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { Droplets, Loader2 } from "lucide-react";
+import { ArrowRight, Droplets, Loader2 } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { useMintTokens } from "@/hooks/use-mint-tokens";
@@ -67,8 +67,8 @@ export default function StablecoinFaucet() {
                 </>
               ) : (
                 <>
-                  USDC Faucet
-                  <Droplets className="h-2 w-2 ml-1" />
+                  Get USDC
+                  <ArrowRight className="h-2 w-2 ml-1" />
                 </>
               )}
             </Button>
